@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addTodo, removeTodo } from './config/redux/reducers/todoSlice'
+import {  addTodo, removeTodo } from './config/reducers/todoSlice'
 
 const App = () => {
 
