@@ -1,50 +1,64 @@
 import React, { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {  addTodo, removeTodo } from './config/reducers/todoSlice'
+import { addTodo, editTodo, removeTodo } from './config/reducers/todoSlice';
 
 const App = () => {
 
-  const todoVal = useRef()
+  // use ref for forms value
+  const ref = useRef()
 
-  // dispatch
+  // use selector
+  const selector = useSelector(state => state.todos.todos);
+  console.log(selector)
+
+  // useDispatch 
   const dispatch = useDispatch()
 
-  //selector
-  const selector = useSelector(state => state.todos.todo);
-  console.log(selector);
+  // add todo into redux
 
-
-  const addTodoInRedux = (event) => {
+  const todo = (event) => {
     event.preventDefault()
-    console.log("todo added", todoVal.current.value)
+    console.log(ref.current.value)
     dispatch(addTodo({
-      title: todoVal.current.value
+      title: ref.current.value
     }))
   }
 
-
-  const deleteItemFromRedux = (index)=>{
-    console.log("delete item" , index);
+  // delete todo
+  const deleteTodo = (index)=>{
+    console.log('todo delete' , index);
     dispatch(removeTodo({
       index
     }))
-
+    
   }
 
 
+  // update Todo
+  const updateTodo = (index)=>{
+    const promptTitle = prompt("enter data")
+    dispatch(editTodo({
+      title: promptTitle,
+      index 
+    }))
+
+    
+
+
+
+  }
+
   return (
     <>
-      <form>
-        <input type="text" ref={todoVal} />
-        <button onClick={addTodoInRedux}>add Todo</button>
-
+    <h1>Todo App</h1>
+      <form onSubmit={todo}>
+        <input type="text" placeholder='enter todo' ref={ref} />
+        <button >addTodo</button>
       </form>
-        <ul>
-          {selector.length > 0 ? selector.map((item , index) => {
-            return <li key={item.id}>{item.title}
-            <button onClick={()=>deleteItemFromRedux(index)}>delete</button></li>
-          }) : <h1>No data found</h1>}
-        </ul>
+
+      <ol>
+        {selector.map((item , index) => <li key={item.id}>{item.title}  <button onClick={()=> updateTodo(index)}>Edit</button><button onClick={()=> deleteTodo(index)}>Delete</button> </li>)}
+      </ol>
     </>
   )
 }
